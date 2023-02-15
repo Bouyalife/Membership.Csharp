@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Membership.Migrations
 {
     /// <inheritdoc />
-    public partial class initMigratation : Migration
+    public partial class initMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,9 +20,12 @@ namespace Membership.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    memberId = table.Column<int>(type: "int", nullable: false)
+                    memberId = table.Column<long>(type: "bigint", nullable: false),
+                    points = table.Column<int>(type: "int", nullable: false),
+                    memberType = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {

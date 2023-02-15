@@ -13,6 +13,17 @@ using Microsoft.EntityFrameworkCore;
             Configuration = configuration;
         }
                                 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Member>()
+                .Property(p => p.memberType)
+                .HasDefaultValue("silver");
+            modelBuilder.Entity<Member>()
+                .Property(p => p.points)
+                .HasDefaultValue(0);
+            
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             var connectionString = Configuration.GetConnectionString("MembershipApp");

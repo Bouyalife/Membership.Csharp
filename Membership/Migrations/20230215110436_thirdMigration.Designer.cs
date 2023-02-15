@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Membership.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230214155302_initMigratation")]
-    partial class initMigratation
+    [Migration("20230215110436_thirdMigration")]
+    partial class thirdMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,12 +27,23 @@ namespace Membership.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<long>("memberId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("memberType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("longtext")
+                        .HasDefaultValue("silver");
+
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("memberId")
-                        .HasColumnType("int");
+                    b.Property<int>("points")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 

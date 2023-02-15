@@ -2,6 +2,7 @@
 using Membership.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Membership.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20230215105224_initMigration")]
+    partial class initMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,18 +32,14 @@ namespace Membership.Migrations
 
                     b.Property<string>("memberType")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("longtext")
-                        .HasDefaultValue("silver");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("points")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
