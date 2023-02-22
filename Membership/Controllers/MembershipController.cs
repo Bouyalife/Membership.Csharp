@@ -17,24 +17,23 @@ namespace Membership.Controllers
             _configuration = configuration;
         }
 
-        // Create member
         [HttpPost("createMember")]
         public void CreateMember(string name, long memberId)
         {
-            string conString = _configuration.GetConnectionString("MembershipApp");
-            MySqlConnection conn = new MySqlConnection(conString);
             try
             {
+                string conString = _configuration.GetConnectionString("MembershipApp");
+                MySqlConnection conn = new MySqlConnection(conString);
                 conn.Open();
+
                 MySqlCommand cmd = new MySqlCommand("INSERT INTO member (name,memberId) VALUES (@name,@memberID)", conn);
                 cmd.Parameters.AddWithValue("name", name);
                 cmd.Parameters.AddWithValue("memberID", memberId);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
-
                 conn.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
@@ -44,12 +43,12 @@ namespace Membership.Controllers
         [HttpGet("getmember")]
         public Member GetMember(long memberId)
         {
-            string conString = _configuration.GetConnectionString("MembershipApp");
-            MySqlConnection conn = new MySqlConnection(conString);
-            
             try
             {
+                string conString = _configuration.GetConnectionString("MembershipApp");
+                MySqlConnection conn = new MySqlConnection(conString);
                 conn.Open();
+
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM member WHERE memberId=@memberId",conn);
                 cmd.Parameters.AddWithValue("@memberId", memberId);
                 MySqlDataReader dReader = cmd.ExecuteReader();
@@ -58,7 +57,9 @@ namespace Membership.Controllers
                 {
                     return new Member((string)dReader[1], (long)dReader[2], (int)dReader[3], (string)dReader[4]); 
                 }
+
                 dReader.Close();
+                conn.Close();
             }
             catch(Exception ex)
             {
@@ -66,17 +67,16 @@ namespace Membership.Controllers
             }
             return new Member("non found",0);
         }
-        // Set membership type
 
         [HttpPost("setmembertype")]
         public void SetMembershiptype(long memberId, string membershipType)
         {
-            String conString = _configuration.GetConnectionString("MembershipApp");
-            MySqlConnection conn = new MySqlConnection(conString);
-
             try
             {
+                String conString = _configuration.GetConnectionString("MembershipApp");
+                MySqlConnection conn = new MySqlConnection(conString);
                 conn.Open();
+
                 MySqlCommand cmd = new MySqlCommand("UPDATE member SET memberType=@membershipType WHERE memberId=@memberId", conn);
                 cmd.Parameters.AddWithValue("@membershipType",membershipType);
                 cmd.Parameters.AddWithValue("@memberId", memberId);
@@ -90,25 +90,23 @@ namespace Membership.Controllers
             }
         }
 
-        // Set points of a member
+        // Set amount of points of a member
         [HttpPost("setpoints")]
         public void SetPoints(int points, long memberId)
         {
-            Console.WriteLine("Points: " + points);
-            Console.WriteLine("Member id: " + memberId);
-
-            String conString = _configuration.GetConnectionString("MembershipApp");
-            MySqlConnection conn = new MySqlConnection(conString);
-            
             try
             {
+                String conString = _configuration.GetConnectionString("MembershipApp");
+                MySqlConnection conn = new MySqlConnection(conString);
                 conn.Open();
+
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM member WHERE memberId=@memberID", conn);
                 cmd.Parameters.AddWithValue("@memberID", memberId);
                 cmd.Prepare();
                 MySqlDataReader dReader = cmd.ExecuteReader();
                 long tmpMemberId = 0;
                 int tmpPoints = 0;
+
                 while (dReader.Read())
                 {
                     tmpMemberId = (long) dReader[2];
@@ -125,27 +123,26 @@ namespace Membership.Controllers
                     cmd1.Prepare();
                     cmd1.ExecuteNonQuery();
                 }
+
+                conn.Close();
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
-            conn.Close();
-
         }
 
-        // Get all members in database
+        // Get all members in database tables
         [HttpGet("members")]
         public List<Member> Get()
         {
-          
-            string conString = _configuration.GetConnectionString("MembershipApp");
-            MySqlConnection conn = new MySqlConnection(conString);
-            List<Member> list = new List<Member>(); 
+
+            List<Member> list = new List<Member>();
 
             try
             {
-                Console.WriteLine("Connecting to MySQL...");
+                string conString = _configuration.GetConnectionString("MembershipApp");
+                MySqlConnection conn = new MySqlConnection(conString);
                 conn.Open();
 
                 string sqlCommand = "SELECT * FROM member";
@@ -157,14 +154,13 @@ namespace Membership.Controllers
                     list.Add(new Member((string)dReader[1], (long)dReader[2])); //  name, memberid
                 }
                 dReader.Close();
+                
+                conn.Close();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
-
-            conn.Close();
-
             return list;
         }
     }
