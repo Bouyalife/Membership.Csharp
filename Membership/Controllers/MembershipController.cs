@@ -17,6 +17,7 @@ namespace Membership.Controllers
             _configuration = configuration;
         }
 
+        // memberId = personnummer/socialsecuritynumber
         [HttpPost("createMember")]
         public void CreateMember(string name, long memberId)
         {
